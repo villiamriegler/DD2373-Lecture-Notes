@@ -1,0 +1,89 @@
+\Lecture{Introduction}
+
+Important links: 
+\begin{itemize}
+    \item Link to course book pdf: \href{https://dpvipracollege.ac.in/wp-content/uploads/2023/01/John-E.-Hopcroft-Rajeev-Motwani-Jeffrey-D.-Ullman-Introduction-to-Automata-Theory-Languages-and-Computations-Prentice-Hall-2006.pdf}{here}
+    \item Solution manual for exercises: \href{http://infolab.stanford.edu/~ullman/ialc.html#solutions}{here}
+\end{itemize}
+
+\subsection{Central definitions}
+The first lecture introduces some central definitions relevant to automata theory and formal languages. \\
+
+\begin{definition}[Alphabet] \label{def:alphabet}
+    An alphabet is a finite, nonempty set of symbols, which by convention it is denoted by $\Sigma$.
+\end{definition}
+\begin{example}
+    An alphabet can be almost any finite nonempty set. Some common ones include: 
+    \begin{itemize}
+        \item The binary alphabet $\Sigma = \set{0,1}$
+        \item The set of all lowercase letters $\Sigma = \set{a,b,\dots, z}$
+        \item The set of ASCII characters
+    \end{itemize}
+\end{example}
+
+\begin{definition}[String] \label{def:string}
+    A string (or word) is a finite sequence of symbols from some alphabet $\Sigma$
+\end{definition}
+
+\begin{example}
+  $1010$ is a string from the binary alphabet $\Sigma = \set{0,1}$.
+\end{example}
+
+\begin{definition}[The empty string] \label{def:empty-string}
+    The empty string is a string with zero occurrences of symbols. It can be chosen from any alphabet and, is by convention denoted as $\epsilon$.
+\end{definition}
+
+\begin{definition}[The set of all strings]
+    The set of all strings over some alphabet $\Sigma$ is denoted by $\Sigma^*$. It is simply the powerset over $\Sigma$.
+\end{definition}
+
+In the following definitions and examples consider strings defined over the alphabet $\Sigma = \set{a}$, belonging to the language (see \ref{def:language}) defined as $$\sigma ::= \epsilon | a\sigma$$
+
+\begin{definition}[The length of a string] \label{def:string-length}
+    The length of a string can be inductively defined as follows 
+    \begin{align*}
+        |\epsilon| &\defeq 0 \\
+        |ax| &\defeq 1 + |x|
+    \end{align*}
+    ($|x|$ is the conventional notation for the length of a string)
+\end{definition}
+
+\begin{definition}[String concatenation] \label{def:string-concatenation}
+    Let $x,y$ be strings, then $xy$ or $x \cdot y$ denotes the concatenation of $x$ and $y$. It is inductively defined as 
+    \begin{align*}
+        \epsilon \cdot x &\defeq x \\
+        (a \cdot x) \cdot y &\defeq a \cdot (x \cdot y)
+    \end{align*}
+\end{definition}
+
+Note that for any string $w$ the equation $\epsilon w = w\epsilon = w$ holds, this means that $\epsilon$ is the identity element for concatenation. 
+
+\begin{definition}[Language] \label{def:language}
+    If $\Sigma$ is an alphabet and $L\subseteq \Sigma^*$ then $L$ is a language over $\Sigma$. 
+\end{definition}
+
+\begin{example}
+    Let $\Sigma = \set{0,1}$ then $$L = \set{\epsilon, 1, 0, 11, 00, 01, 10}$$ is a language over $\Sigma$. For every alphabet the smallest possible language is $L = \emptyset$ and the largest possible $L = \Sigma^*$.
+\end{example}
+
+\begin{definition}[Language concatenation] \label{def:language-concatenation}
+Let $L_1, L_2 \subseteq \Sigma^*$ for some alphabet $\Sigma$ then their concatenation is defined as $$L_1 \cdot L_2 \defeq \set{x_1 \cdot x_2 | x_1 \in L_1, x_2\in L_2}$$ 
+\end{definition}
+
+A language can be concatenated with itself, resembling powers of a language. Let $L \subseteq \Sigma^*$ then $L^k$ can be inductively defined as 
+\begin{align*}
+    L^0 &\defeq \set{\epsilon} \\
+    L^{i+1} &\defeq L \cdot L^i
+\end{align*}
+Notice that $L^0 \defeq \set{\epsilon}$, an alternative would be to define $L^0 \defeq \emptyset$ however, in that case $L^k$ would reduce to $\emptyset$ and $L^1 \neq L$ since $L\cdot \emptyset = \emptyset$. Hence $\set{\epsilon}$ is the \textit{identity} for language concatenation and, $\emptyset$ is an \textit{absorbing} element.
+
+\begin{definition}[Kleene star] \label{def:kleene-star}
+    Let $L\subseteq \Sigma^*$ for some alphabet $\Sigma$, then $L^*$ and $L^+$ are defined as 
+    \begin{align*}
+        L^* &\defeq \bigcup_{i \geq0} L^i \\
+        L^+ &\defeq \bigcup_{i > 0} L ^i
+    \end{align*}
+\end{definition}
+
+\subsubsection{Problems}
+In automata theory problems are really the same thing as languages. A problem is the question of deciding whether a given string is a member of some language. Hence, in automata theory we are generally only concerned with decision problems. Whether a decision problem can be solved efficiently is always a lower bound to the corresponding construction problem.
