@@ -6,6 +6,41 @@ Important links:
     \item Solution manual for exercises: \href{http://infolab.stanford.edu/~ullman/ialc.html#solutions}{here}
 \end{itemize}
 
+\subsection{Proofs}
+
+\subsubsection{Deductive proofs} 
+A deductive proof is a logical sequence of statements from some initial statement (\textit{hypothesis} $H$) to a conclusion statement ($C$). The general form of a deductive theorem is usually 
+\begin{itemize}
+    \item "if $H$ then $C$"
+\end{itemize}
+
+If we do no know where to begin with a proof it is useful to reduce all the terms in the hypothesis to their definitions. 
+\begin{example} 
+    Definitions: 
+    \begin{itemize}
+        \item A set $S$ is finite if there exists some integer such $u$ that $|S| = u$.
+    \end{itemize}
+    
+    \textbf{Theorem:} Let $S,T$ be some finite sets. If $S \cup T = U$ and $S \cap T = \emptyset$ then $|U| = |S| + |T|$.
+
+    Proof: Trivial from definitions.
+\end{example}
+
+Two sided proofs come in the form "A if and only if B". These have to be proven by two proofs 
+\begin{itemize}
+    \item The "If A then B" part 
+    \item The "If B then A" part
+\end{itemize}
+
+It is sometimes useful to prove the \textit{contrapositive} statement. A contrapositive statement exists for every "If H then C" statement and comes in the form "If not C then not H". Both forms are logically equivalent.
+
+\subsubsection{Inductive proofs}
+Inductive proofs often deal with sequences, for example we might want to prove that some $S(n)$ holds for all $n$ greater than some $k$.
+
+Induction is not limited to integers however. Structural induction deals with proving inductive statements over any recursively defined structure. That is, if we have some recursive definition for some structure $X$ then, we can prove statements in the form $S(X)$ with the same inductive principles as for integers.
+
+Mutual induction is when we cannot prove the statement $S(n)$ alone and, instead have to prove a group of statements $S_1(n), S_2(n), \dots,S_k(n)$ together. Here each of the statements must be proved separately in the basis and in the inductive step. If the statements are of the two sided form then both sides have to be proved for each statement.
+
 \subsection{Central definitions}
 The first lecture introduces some central definitions relevant to automata theory and formal languages. \\
 
@@ -67,7 +102,7 @@ Note that for any string $w$ the equation $\epsilon w = w\epsilon = w$ holds, th
 \end{example}
 
 \begin{definition}[Language concatenation] \label{def:language-concatenation}
-Let $L_1, L_2 \subseteq \Sigma^*$ for some alphabet $\Sigma$ then their concatenation is defined as $$L_1 \cdot L_2 \defeq \set{x_1 \cdot x_2 | x_1 \in L_1, x_2\in L_2}$$ 
+Let $L_1, L_2 \subseteq \Sigma^*$ for some alphabet $\Sigma$ then their concatenation is defined as $$L_1 \cdot L_2 \defeq \setdef{x_1 \cdot x_2}{ x_1 \in L_1, x_2\in L_2}$$ 
 \end{definition}
 
 A language can be concatenated with itself, resembling powers of a language. Let $L \subseteq \Sigma^*$ then $L^k$ can be inductively defined as 

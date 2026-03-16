@@ -1,0 +1,88 @@
+% Lecture section replacement command 
+\newcounter{lectureCounter}
+\renewcommand{\thesubsection}{\arabic{lectureCounter}.\arabic{subsection}}
+\newcommand{\Lecture}[1]{
+    \refstepcounter{lectureCounter}
+    \setcounter{subsection}{0}
+    \section*{Lecture \arabic{lectureCounter}: #1}
+    \addcontentsline{toc}{section}{Lecture \arabic{lectureCounter}: #1}
+}
+
+% Theorem and definitions  
+\newtheorem{theorem}{Theorem}[lectureCounter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}{Definition}[lectureCounter]
+
+\newenvironment{example}
+  {\begin{proof}[Example]\renewcommand{\qedsymbol}{$\star$}}
+  {\end{proof}}
+
+\renewcommand{\thetheorem}{\arabic{lecture_counter}.\arabic{theorem}}
+
+% Macros imported from course website
+\newcommand{\head}[1]{\begin{center}{\color{blue} \bf #1}\end{center}}
+
+\newcommand{\ul}{\underline}
+\newcommand{\ol}{\overline}
+
+\newcommand{\defeq}{\stackrel {\mbox{\tiny def}}{=}}
+\newcommand{\defequiv}{\stackrel {\mbox{\tiny def}}{\Longleftrightarrow}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\setdef}[2]{\left\{ #1 \mid #2 \right\}}
+\newcommand{\just}[1]{\left\{ \mbox{#1} \right\}}
+\newcommand{\tuple}[1]{\left< #1 \right>}
+
+
+\newcommand{\langof}[1]{{\cal L}(#1)}
+\newcommand{\length}[1]{\left| #1 \right|}
+\newcommand{\size}[1]{\left| #1 \right|}
+\newcommand{\numocc}[2]{\sharp #1 (#2)}
+\newcommand{\eclass}[1]{\left[ #1 \right]}
+\newcommand{\labeclass}[2]{\left[ #1 \right]_{#2}}
+\newcommand{\stringop}[2]{\mbox{\bf #1 } #2}
+\newcommand{\rev}[1]{\stringop{rev}{#1}}
+\newcommand{\two}[1]{\stringop{two}{#1}}
+\newcommand{\pref}[1]{\stringop{pref}{#1}}
+\newcommand{\lpar}[1]{[_{#1}}
+\newcommand{\rpar}[1]{]_{#1}}
+
+
+\newcommand{\Not}[1]{\neg #1}
+\newcommand{\Or}[2]{#1 \vee #2}
+\newcommand{\And}[2]{#1 \wedge #2}
+\newcommand{\Implies}[2]{#1 \Rightarrow #2}
+\newcommand{\Equiv}[2]{#1 \Leftrightarrow #2}
+
+
+\newcommand{\In}[2]{#1 \in #2}
+\newcommand{\Notin}[2]{#1 \not\in #2}
+\newcommand{\Union}[2]{#1 \cup #2}
+\newcommand{\Intersect}[2]{#1 \cap #2}
+\newcommand{\Product}[2]{#1 \times #2}
+\newcommand{\Concat}[2]{#1 \cdot #2}
+\newcommand{\Ast}[1]{{#1}^\ast}
+\newcommand{\Astplus}[1]{{#1}^+}
+\newcommand{\Pow}[1]{2^{#1}}
+\newcommand{\Subset}[2]{#1 \subseteq #2}
+
+
+\newcommand{\Mapping}[3]{#1 : #2 \rightarrow #3}
+\newcommand{\refa}[2]{\alpha^{#1}_{#2}}
+\newcommand{\subst}[3]{{\bf s}^{#1}_{#2} (#3)}
+\newcommand{\Prod}[2]{#1 \rightarrow #2}
+\newcommand{\OSDeriv}[2]{#1 \rightarrow_G #2}
+\newcommand{\LabDeriv}[3]{#1 \stackrel{#2}{\rightarrow}_G #3}
+\newcommand{\Deriv}[2]{\LabDeriv{#1}{\ast}{#2}}
+\newcommand{\SDeriv}[2]{#1 \rightarrow_G #2}
+\newcommand{\RDeriv}[2]{#1 \rightarrow^\ast_G #2}
+\newcommand{\TDeriv}[2]{#1 \rightarrow^+_G #2}
+\newcommand{\TDerivS}[3]{#1 \rightarrow^+_{#2} #3}
+\newcommand{\Labprod}[3]{#1 \stackrel{#2}{\hookrightarrow} #3}
+\newcommand{\Labtrans}[3]{#1 \stackrel{#2}{\longrightarrow} #3}
+\newcommand{\Trans}[2]{#1 \rightarrow #2}
+\newcommand{\RTtrans}[2]{#1 \rightarrow^{\ast} #2}
+\newcommand{\config}[2]{\left< #1, #2 \right>}
+\newcommand{\tmconfig}[3]{\left< #1, #2, #3 \right>}
+
+

@@ -5,33 +5,7 @@
 \usepackage{hyperref}
 \usepackage{parskip}
 
-
-% Lecture section replacement command 
-\newcounter{lectureCounter}
-\renewcommand{\thesubsection}{\arabic{lectureCounter}.\arabic{subsection}}
-\newcommand{\Lecture}[1]{
-    \refstepcounter{lectureCounter}
-    \setcounter{subsection}{0}
-    \section*{Lecture \arabic{lectureCounter}: #1}
-    \addcontentsline{toc}{section}{Lecture \arabic{lectureCounter}: #1}
-}
-
-% Theorem and definitions  
-\newtheorem{theorem}{Theorem}[lectureCounter]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{definition}{Definition}[lectureCounter]
-
-\newenvironment{example}
-  {\begin{proof}[Example]\renewcommand{\qedsymbol}{$\star$}}
-  {\end{proof}}
-
-\renewcommand{\thetheorem}{\arabic{lecture_counter}.\arabic{theorem}}
-
-% Macros
-\newcommand{\set}[1]{\left\{#1 \right\}}
-\newcommand{\defeq}{\stackrel {\mbox{\tiny def}}{=}}
-
+\include{texdefs}
 
 \begin{document}
 
