@@ -1,0 +1,89 @@
+\Lecture{DFA and Regular languages}
+Regular languages are exactly the ones that can be described by finite automata.
+
+\subsection{Deterministic finite automata}
+\begin{definition}[DFA] \label{def:dfa}
+    A deterministic finite automata consists of 
+    \begin{itemize}
+        \item A finite set of states $Q$
+        \item A finite set of input symbols $\Sigma$
+        \item A transition function $\delta : Q\times \Sigma \rightarrow Q$
+        \item An initial state $q_0 \in Q$
+        \item A set of final/accepting states $F \subseteq Q$
+    \end{itemize}
+    It is commonly described as a five-tuple $$A = (Q, \Sigma, \delta, q_0, F)$$
+\end{definition}
+
+The language (\ref{def:language}) of the DFA is the set of all sequences of symbols (strings \ref{def:string}) that the DFA accepts. 
+\begin{example}
+    Suppose $w = a_1a_2 \dots a_n \in \Sigma$ is a sequence of input symbols (a string \ref{def:string}), fed into a deterministic finite automata $A = (Q, \Sigma, \delta, q_0, F)$. Then 
+    $$q_i = \delta(q_{i-1}, a_i)$$
+    $w$ is accepted by $A$ iff $q_n \in F$.
+\end{example}
+
+If we recursively define $\hat\delta: Q \times \Sigma^* \rightarrow Q$ to be the transition function over strings instead of symbols
+\begin{align*}
+    \hat\delta(q, \epsilon) &\defeq q \\
+    \hat\delta(q, xa) &\defeq \delta(\hat\delta(q,x), a)
+\end{align*}
+
+\begin{example}
+    For a sting $w = a_1 a_2 \dots a_n \in \Sigma$, we shall see that $\hat\delta(q_0, w)$ is precisely the same definition given in the first example. Hence the sequence of states traversed by $w$ will be defined as $$q_i = \delta(q_{i-1}, a_i), \quad i > 0$$ We claim that $$\hat\delta(q_0, w) = q_n$$
+    
+    \textbf{Base case:} $w = \epsilon$, by definition $\hat\delta(q_0, \epsilon) = q_0$ 
+    
+    \textbf{Inductive step:} Suppose the claim holds for a string $x = a_1 \dots a_{n-1} \in \Sigma^*$ and, let $w = xa_n$ then $$\hat\delta(q_0, w) = \delta(\hat\delta(q_0,x), a_n)$$
+    whereby the induction hypothesis $\hat\delta(q_0,x) = q_{n-1}$, so $$\hat\delta(q_0, w) = \delta(q_{n-1}, a_n) = q_n$$
+\end{example}
+
+We can then define the language expressed by some DFA $A = (Q, \Sigma, \delta, q_0, F)$ to be the set $$L(A) = \setdef{w \in  \Sigma^*}{\hat\delta(q_0, w) \in F}$$
+
+\subsubsection{Example: DFA that accepts binary strings x01y (Transition diagrams and Transition tables)}
+Consider constructing a DFA that accepts all strings from the alphabet $\Sigma = \set{0,1}$ such that $$L = \setdef{x01y}{ x,y \in \Sigma^*}$$
+
+This DFA must remember whether it has encountered the sequence $01$ at any point in the string. This means that it must have three states
+\begin{enumerate}
+    \item It has not yet seen $01$, and the most recent input was not $0$. 
+    \item We have not yet seen $01$, but the most recent input was $0$. If we now see a $1$ the input will be accepted.
+    \item We have already seen $01$, hence any remaining input will be accepted
+\end{enumerate}
+
+\begin{figure}[h]
+    \centering
+    \begin{automata}
+        \node[state, initial] (q_0) {$q_0$};
+        \node[state, right=of q_0] (q_1) {$q_1$};
+        \node[state, right=of q_1, accepting] (q_2) {$q_2$};
+
+        \path (q_0) edge[] node{$0$} (q_1);
+        \path (q_0) edge[loop above] node{$1$} ();
+
+        \path (q_1) edge[loop above] node{$0$} ();
+        \path (q_1) edge[] node{$1$} (q_2);
+        
+        \path (q_2) edge[loop above] node{$0,1$} ();
+    \end{automata} 
+    \caption{Transition diagram describing the x01y automata}
+    \label{fig:binary-x01y-automata-diagram}
+\end{figure}
+
+From Fig.\ref{fig:binary-x01y-automata-diagram} it is easy to see that $\delta$ should be defined as 
+\begin{align*}
+    \delta(q_0, 1) &= q_0 \\
+    \delta(q_0, 0) &= q_1 \\
+    \delta(q_1, 0) &= q_1 \\
+    \delta(q_1, 1) &= q_2 \\
+    \delta(q_2, 0) &= \delta(q_2, 1) = q_2 \\
+\end{align*}
+this can also perhaps more easily be expressed as the transition table in Fig.\ref{fig:binary-x01y-automata-table}.
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{c||c|c}
+              & 0     & 1 \\\hline
+        $q_0$ & $q_1$ & $q_0$ \\\hline
+        $q_1$ & $q_1$ & $q_2$\\\hline
+        $q_2$ & $q_2$ & $q_2$ \\
+    \end{tabular}
+    \caption{Transition table describing the x01y automata}
+    \label{fig:binary-x01y-automata-table}
+\end{figure}

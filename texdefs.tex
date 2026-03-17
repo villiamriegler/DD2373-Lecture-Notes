@@ -20,6 +20,29 @@
 
 \renewcommand{\thetheorem}{\arabic{lecture_counter}.\arabic{theorem}}
 
+% Tikz environments 
+\newenvironment{automata}{
+    \begin{tikzpicture}[
+        ->,
+        >=Stealth,
+        shorten >=1pt,
+        auto,
+        node distance=2.8cm,
+        semithick,
+        every state/.style={draw, minimum size=8mm}
+    ]
+}{
+    \end{tikzpicture}
+}
+
+% Styling
+\usepackage{xcolor}
+\usepackage[
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue!60!black,
+]{hyperref}
+
 % Macros imported from course website
 \newcommand{\head}[1]{\begin{center}{\color{blue} \bf #1}\end{center}}
 
