@@ -1,0 +1,28 @@
+\Lecture{Nondeterministic finite automata}
+
+A nondeterministic finite automata (NFA) can be in more than one states at the same time. The NFAs also accept precisely the regular languages. Therefore, we can always convert any NFA into some DFA, however the resulting DFA may have exponentially more states than the NFA.
+
+The definition of the NFA is the same as for the DFA, except that $\delta$ is a function that may return zero or more states.
+
+\begin{definition}[NFA] \label{def:dfa}
+    A nondeterministic finite automata consists of 
+    \begin{itemize}
+        \item A finite set of states $Q$
+        \item A finite set of input symbols $\Sigma$
+        \item A transition function $\delta : Q\times \Sigma \rightarrow \mathcal{P}(Q)$
+        \item An initial state $q_0 \in Q$
+        \item A set of final/accepting states $F \subseteq Q$
+    \end{itemize}
+    It is commonly described as a five-tuple $$A = (Q, \Sigma, \delta, q_0, F)$$
+\end{definition}
+
+The transition function $\hat\delta$ over some string $w = xa$ where $x\in \Sigma^*$ and $a \in \Sigma$ will now be defined as 
+\begin{align*}
+    \hat\delta(q, \epsilon) &\defeq \set{q} \\
+    \hat\delta(q, xa) &\defeq \bigcup_{p\in \hat\delta(q,x)} \delta(p, a)
+\end{align*}
+
+The language expressed by some NFA $A = (Q, \Sigma, \delta, q_0, F)$ is defined as 
+$$L(A) = \setdef{w \in \Sigma^*}{\hat\delta(q_0, w) \cap F \neq \emptyset}$$
+
+\subsection{Equivalence of NFA and DFA}

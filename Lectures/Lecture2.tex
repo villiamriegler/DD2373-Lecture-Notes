@@ -1,6 +1,8 @@
 \Lecture{DFA and Regular languages}
 Regular languages are exactly the ones that can be described by finite automata.
 
+A DFA decides some property $P(x)$ on strings $x \in \Sigma^*$.
+
 \subsection{Deterministic finite automata}
 \begin{definition}[DFA] \label{def:dfa}
     A deterministic finite automata consists of 
@@ -87,3 +89,22 @@ this can also perhaps more easily be expressed as the transition table in Fig.\r
     \caption{Transition table describing the x01y automata}
     \label{fig:binary-x01y-automata-table}
 \end{figure}
+
+\subsection{Closure properties of regular languages}
+
+\begin{itemize}
+    \item The union of two regular languages is regular
+    \item The intersection of two regular languages is regular
+    \item The complement of a regular language is regular
+    \item The difference of two regular languages is regular
+    \item The reversal of of a regular language is regular
+    \item The closure (star) of a regular language is regular
+    \item The concatenation of regular languages is regular
+    \item A homomorphism of a regular language is regular
+    \item The inverse homomorphism of a regular language is regular
+\end{itemize}
+
+\paragraph{Clarification (homomorphisms):} A homomorphism on a language $L \subseteq \Sigma^*$ is a function $h$ on $\Sigma$ to some other alphabet $\Gamma$ s.t $h: \Sigma \rightarrow \Gamma^*$. In essence, a replacement of symbols for strings. The inverse homomorphism of some language $S$ is simply $h^{-1}(S) = \setdef{w \in \Sigma^*}{h(w) \in S}$.
+
+\textit{Proofs when time...}
+
