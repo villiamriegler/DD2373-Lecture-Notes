@@ -4,7 +4,7 @@ A nondeterministic finite automata (NFA) can be in more than one states at the s
 
 The definition of the NFA is the same as for the DFA, except that $\delta$ is a function that may return zero or more states.
 
-\begin{definition}[NFA] \label{def:dfa}
+\begin{definition}[NFA] \label{def:nfa}
     A nondeterministic finite automata consists of 
     \begin{itemize}
         \item A finite set of states $Q$
@@ -26,3 +26,96 @@ The language expressed by some NFA $A = (Q, \Sigma, \delta, q_0, F)$ is defined 
 $$L(A) = \setdef{w \in \Sigma^*}{\hat\delta(q_0, w) \cap F \neq \emptyset}$$
 
 \subsection{Equivalence of NFA and DFA}
+DFA's can do whatever NFA's can do. An important step in the proof for this is the \textit{subset-construction}.
+
+\begin{definition} [The subset construction] \label{def:subset-construction}
+    Given some NFA $N = (Q_N, \Sigma_, \delta_N, q_0, F_N)$ we aim to construct a DFA $D$ such that $L(N) = L(D)$. We will denote this construction as 
+    $$D = (Q_D, \Sigma, \delta_D, \set{q_0}, F_D)$$
+    where 
+    \begin{align*}
+        Q_D &= \mathcal{P}(Q_N) \\
+        F_D &= \setdef{S\in\mathcal{P}(Q_N)}{S\cap F_N \neq \emptyset}
+    \end{align*}
+    The transition function is as usual $\delta_D : Q_D\times \Sigma \rightarrow Q_D$ and notice that it now operates on subsets of $Q_N$. Hence for each $S\in Q_D \Leftrightarrow S \subseteq Q_N$ and input symbol $a\in \Sigma$
+    $$\delta_D(S, a) = \bigcup_{p\in S} \delta_N(p,a)$$
+\end{definition}
+
+\begin{lemma} \label{lem:equal-nfa-dfa-transitions}
+    If $D = (Q_D, \Sigma, \delta_D, \set{q_0}, F_D)$ is the DFA constructed from NFA $N = (Q_N, \Sigma_, \delta_N, q_0, F_N)$ by the subset construction (\ref{def:subset-construction}) and $w \in \Sigma^*$, then $\hat\delta_N(q_0, w) = \hat\delta_D(\set{q_0}, w)$. 
+\end{lemma}
+
+\begin{proof}
+    We will prove this fact by induction over the length of $w$.
+
+    \textbf{Basis:} Let $|w| = 0 \Leftrightarrow w = \epsilon$. By the definitions of $\hat\delta$ for NFA's and DFA's $$\hat\delta_N(q_0, w) = \hat\delta_D(\set{q_0}, w) = \set{q_0}$$
+
+    \textbf{Induction:} Let $|w| = n + 1$ and assume the statement holds for $|w| = n$. Break $w$ into $w = xa$ where $x \in \Sigma^*$ and $a \in \Sigma$. By the induction hypothesis $\hat\delta_N(q_0, x) = \hat\delta_D(\set{q_0}, x)$. The definitions for $\hat\delta$ for $N$ and $D$ tells us that 
+    \begin{align*}
+        \hat\delta_N(q_0, w) &= \bigcup_{p\in \hat\delta_N(q_0, x)} \delta_N(p, a) \\
+        \hat\delta_D(\set{q_0}, w) &= \bigcup_{p\in \hat\delta_D(\set{q_0}, x)} \delta_N(p, a)
+    \end{align*}
+    Therefore since $\hat\delta_N(q_0, x) = \hat\delta_D(\set{q_0}, x)$ is must be the case that $\hat\delta_N(q_0, w) = \hat\delta_D(\set{q_0}, w)$
+\end{proof}
+
+\begin{theorem}[Equivalence of NFA and DFA] \label{thm:eqv-nfa-dfa}
+    If $D = (Q_D, \Sigma, \delta_D, \set{q_0}, F_D)$ is the DFA constructed from NFA $N = (Q_N, \Sigma_, \delta_N, q_0, F_N)$ by the subset construction (\ref{def:subset-construction}), then $L(N) = L(A)$. 
+\end{theorem}
+
+\begin{proof}
+    By lemma (\ref{lem:equal-nfa-dfa-transitions}) we know that for any string $w \in \Sigma^*$, $\hat\delta_N(q_0, w) = \hat\delta_D(\set{q_0}, w)$. Notice that in both $D$ and $N$ we accept a string iff
+    \begin{align*}
+        \hat\delta_N(q_0, w) \cap F_N \neq \emptyset \\
+        \hat\delta_D(\set{q_0}, w) \cap F_N \neq \emptyset
+    \end{align*}
+    Therefore $L(D) = L(N)$
+\end{proof}
+
+\begin{theorem}
+    The language $L$ is accepted by some DFA iff $L$ is accepted by some NFA.
+\end{theorem}
+
+\begin{proof}
+    (if): Follows from theorem \ref{thm:eqv-nfa-dfa}
+
+    (only-if): Follows from constructing an NFA from a DFA by creating a deterministic NFA. Simply a NFA that happens to only have one choice in each situation.
+\end{proof}
+
+\subsection{FA with epsilon-transitions}
+We may allow our FA to make transitions on the empty string, so called $\epsilon$-NFA's. This again does extend the class of languages that can be accepted.
+
+\begin{definition}[$\epsilon$-NFA] \label{def:eps-nfa}
+    The definition of an $\epsilon$-NFA is exactly the same as for regular NFA (\ref{def:nfa}), except that $\delta : Q\times(\Sigma\cup\set{\epsilon}) \rightarrow \mathcal{P}(Q)$.
+\end{definition}
+
+\begin{theorem}
+    A language $L$ is accepted by some $\epsilon$-NFA iff $L$ is accepted by some DFA.
+\end{theorem}
+
+\subsubsection{The epsilon closure}
+The epsilon closure will help define the transition function for the $\epsilon$-NFA. 
+
+\begin{definition}[The epsilon closure] \label{def:eps-closure}
+    We will denote the epsilon closure for some state $q$ as $ECLOSE(q)$ and define it by 
+
+    \textbf{Basis:} State $q$ is in $ECLOSE(q)$, i.e the epsilon closure of some state contains the state itself. 
+
+    \textbf{Induction:} If state $p$ is in $ECLOSE(q)$ and $\delta$ is the transition function for the $\epsilon$-NFA. Then all states $\delta(p, \epsilon) \in ECLOSE(q)$.
+\end{definition}
+
+\subsubsection{Extended transitions and languages for $\epsilon$-NFA's}
+For some $\epsilon$-NFA the extended transition function $\hat\delta$ is defined as 
+\begin{align*}
+    \hat\delta(q, \epsilon) &\defeq ECLOSE(q) \\
+    \hat\delta(q, xa) &\defeq ECLOSE\left(\bigcup_{p\in \hat\delta(q,x)} \delta(p,a) \right)
+\end{align*}
+
+\subsubsection{Eliminating epsilon transitions}
+Much like in NFA's and DFA's we can construct a DFA from any $\epsilon$-NFA. The construction is as follows.
+
+Let $E = (Q_E, \Sigma, \delta_E, q_0, F_E)$ be an $\epsilon$-NFA and $D = (Q_D, \Sigma, \delta_D, q_D, F_D)$ the DFA constructed from $E$.
+\begin{itemize}
+    \item $Q_D = \setdef{S\in \mathcal{P}(Q_E)}{ S = ECLOSE(S)}$
+    \item $q_D = ECLOSE(q_0)$
+    \item $F_D = \setdef{S\in Q_D}{ S \cup F_E \neq \emptyset}$
+    \item $\delta_D(q, a) = ECLOSE\left( \bigcup_{p\in q} \delta_E(p,a)\right)$
+\end{itemize}

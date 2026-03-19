@@ -12,13 +12,13 @@
 \newtheorem{theorem}{Theorem}[lectureCounter]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{definition}{Definition}[lectureCounter]
+\newtheorem{definition}[theorem]{Definition}
 
 \newenvironment{example}
   {\begin{proof}[Example]\renewcommand{\qedsymbol}{$\star$}}
   {\end{proof}}
 
-\renewcommand{\thetheorem}{\arabic{lecture_counter}.\arabic{theorem}}
+\renewcommand{\thetheorem}{\arabic{lectureCounter}.\arabic{theorem}}
 
 % Tikz environments 
 \newenvironment{automata}{
