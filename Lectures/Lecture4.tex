@@ -1,0 +1,231 @@
+\Lecture{Regular expressions}
+Regular expressions are closely related to NFA's. 
+
+\begin{definition}[Regular expessions]. \label{def:re}
+
+    \textbf{Basis:} 
+    \begin{itemize}
+        \item The constants $\epsilon$ and $\emptyset$ are regular expressions, for the languages $L(\epsilon) = \set{\epsilon}$ and $L(\emptyset) = \emptyset$.
+        \item If $a$ is any symbol, then $a$ is a regular expression for the language $L(a) = \set{a}$.
+        \item A variable such as $L$, is a variable representing any language. 
+    \end{itemize}
+    \textbf{Induction}
+    \begin{itemize}
+        \item If $E$ and $F$ are regular expressions, then $E + F$ is a regular expression for the language $L(E + F) = L(E) \cup L(F)$.
+        \item If $E$ and $F$ are regular expressions, then $EF$ is a regular expression for the language $L(EF) = L(E)L(F)$ (concatenation). 
+        \item If $E$ is a regular expression, then $E^*$ is a regular expression for the language $L(E^*) = (L(E))^*$.
+        \item If $E$ is a regular expression, then $(E)$ is also a regular expression for the same language $L((E)) = L(E)$.
+    \end{itemize}
+\end{definition}
+
+In regular expressions like in many other algebras there is an assumed precedence of the operators. 
+
+\begin{enumerate}
+    \item The $^*$ operator has highest precedence. That is, it applies only to the smallest sequence of symbols to its left. $ab^* \neq (ab)^*$.
+    \item Next is concatenation or the "dot" operator. 
+    \item Last is the union operator $+$. 
+\end{enumerate}
+
+But of course we can manually denote precedence by using parentheses. 
+
+\subsection{Finite automata and Regular expressions}
+The languages expressed by regular expressions are precisely the same as those expressed by finite automaton. That is, the regular languages. 
+
+\begin{theorem}
+    If $L = L(A)$ for some FA $A$, then there is a regular expression $R$ such that $L = L(R)$.
+\end{theorem}
+
+\begin{proof}
+    At the heart of this construction is regular expressions denoted as $R^X_{ij}$, that represent strings constructed such that $\hat\delta_A(i, w) = j$ where $w \in \Sigma^*$ and the path between $i \rightarrow j$ (not including $i,j$) does not contain any state $q\in X$.
+
+    \textbf{Basis:} $X = \emptyset$
+
+    When $X = \emptyset$ we are only allowed direct edges between $i$ and $j$, as paths are not allowed any intermediate states. Hence we have two cases. 
+
+    If $i \neq j$ then there are only three cases 
+    \begin{enumerate}
+        \item There is no symbol $a$ that take us from state $i \rightarrow j$, then $R^\emptyset_{ij} = \emptyset$.
+        \item There is exactly one symbol $a$ that label an edge between $i \rightarrow j$, then $R^\emptyset_{ij} = a$.
+        \item There are $a_1, \dots, a_k$ symbols that label direct edges between $i \rightarrow j$. Then $R^\emptyset_{ij} = a_1 + \dots + a_k$.
+    \end{enumerate}
+
+    If $i = j$ then the legal paths are either of length $0$ (i.e $\epsilon$), or all loops from $i$ to $i$ itself. If the loops on $i$ are labeled by symbols $a_1, \dots, a_k$ then $R^\emptyset_{ii} = \epsilon + a_1 + \dots + a_k$
+
+    \textbf{Induction:} For nonempty $X$. Suppose there is a path between state $i \rightarrow j$ that does not go through state $q \in X$.
+
+    Then there are two cases 
+    \begin{enumerate}
+        \item The path does not go through state $q$ at all. In this case the label of the path is in the language $R^{X\setminus\set{q}}_{ij}$.
+        \item The path goes through state $q$ at least once. Then the path can be split into three pieces: (1) from $i \rightarrow q$, (2) from $q \rightarrow q$ (loops of some length), (3) from $q \rightarrow j$. All of these are in the languages (1) $R^{X\setminus\set{q}}_{iq}$, (2) $R^{X\setminus\set{q}}_{qq}$, (3) $R^{X\setminus\set{q}}_{qj}$.
+    \end{enumerate}
+
+    Hence we can form the regular expression 
+    $$R^{X}_{ij} = R^{X\setminus\set{q}}_{ij} + R^{X\setminus\set{q}}_{iq} (R^{X\setminus\set{q}}_{qq})^* R^{X\setminus\set{q}}_{qj}$$
+
+    The set of accepted strings for this regular expression is then: 
+    $$R = \sum_{f \in F_A} R^{Q}_{q_0f}$$
+\end{proof}
+
+\begin{theorem}
+    Every language $L = L(R)$ defined by some regular expression $R$ is also defined by a finite automata $A$ s.t $L = L(A)$
+\end{theorem}
+
+\begin{proof}
+    We shall construct $\epsilon$-NFA's for each case of the regular expression and show by structural induction that we always can come up with such a construction. 
+
+    \textbf{Basis:} Suppose $R$ is some elementary regular expression, that is
+    \begin{enumerate}[label=\alph*)]
+        \item $R = \set{\epsilon}$
+        \item $R = \emptyset$
+        \item $R = \set{a}, \quad a\in \Sigma$
+    \end{enumerate}
+
+    In Fig.\ref{fig:re-fa-base} we construct the following automata for each case. 
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}{0.9\textwidth}
+            \centering
+            \begin{automata}
+                \node[state, initial] (q0) {};
+                \node[state, right=of q0, accepting] (q1) {};
+
+                \path (q0) edge[] node{$\epsilon$} (q1);
+                \node[draw, rectangle, rounded corners, fit=(q0)(q1), inner sep=10pt] {};
+            \end{automata}
+            \caption{}
+        \end{subfigure}
+        \begin{subfigure}{0.9\textwidth}
+            \centering
+            \begin{automata}
+                \node[state, initial] (q0) {};
+                \node[state, right=of q0, accepting] (q1) {};
+
+                \node[draw, rectangle, rounded corners, fit=(q0)(q1), inner sep=10pt] {};
+            \end{automata}
+            \caption{}
+        \end{subfigure}
+        \begin{subfigure}{0.9\textwidth}
+            \centering
+            \begin{automata}
+                \node[state, initial] (q0) {};
+                \node[state, right=of q0, accepting] (q1) {};
+
+                \path (q0) edge[] node{$a$} (q1);
+
+                \node[draw, rectangle, rounded corners, fit=(q0)(q1), inner sep=10pt] {};
+            \end{automata}
+            \caption{}
+        \end{subfigure}
+        \caption{Construction of $\epsilon$-NFA for the elementary regular expression.}
+        \label{fig:re-fa-base}
+    \end{figure}
+
+    \textbf{Induction:} We assume the theorem is true for all smaller expressions. Then for the operations 
+    \begin{enumerate}[label=\alph*)]
+        \item $R + S$
+        \item $RS$
+        \item $R^*$
+    \end{enumerate}
+
+    In Fig.\ref{fig:re-fa-ind} we construct the following automata by the construction of the automata for the sub expressions $R$ and $S$.
+
+    \begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+        \begin{automata}
+            \node[state, initial] (qs) {};
+
+            \node[state, above right=of qs] (qri) {};
+            \node[state, right=of qri] (qre) {};
+
+            \node[state, below right=of qs] (qsi) {};
+            \node[state, right=of qsi] (qse) {};
+            
+            \node[state, below right=of qre, accepting] (qa) {};
+
+            \path (qs) edge[] node{$\epsilon$} (qri);
+            \path (qre) edge[] node{$\epsilon$} (qa);
+
+            \path (qs) edge[] node{$\epsilon$} (qsi);
+            \path (qse) edge[] node{$\epsilon$} (qa);
+            
+            \node[draw, rectangle, rounded corners, fit=(qri)(qre), inner sep=10pt] {$R$};
+            \node[draw, rectangle, rounded corners, fit=(qsi)(qse), inner sep=10pt] {$S$};
+        \end{automata}
+        \caption{}
+    \end{subfigure}
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+        \begin{automata}
+            \node[state, initial] (qs) {};
+            
+            \node[state, right=of qs] (qri) {};
+            \node[state, right=of qri] (qre) {};
+
+            \node[state, right=of qre] (qsi) {};
+            \node[state, right=of qsi] (qse) {};
+            
+            \node[state, right=of qse, accepting] (qa) {};
+
+            \path (qs) edge[] node{$\epsilon$} (qri);
+            \path (qre) edge[] node{$\epsilon$} (qsi);
+            \path (qse) edge[] node{$\epsilon$} (qa);
+
+            \node[draw, rectangle, rounded corners, fit=(qri)(qre), inner sep=10pt] {$R$};
+            \node[draw, rectangle, rounded corners, fit=(qsi)(qse), inner sep=10pt] {$S$};
+        \end{automata}
+        \caption{}
+    \end{subfigure}
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+        \begin{automata}
+            \node[state, initial] (qs) {};
+            
+            \node[state, right=of qs] (qri) {};
+            \node[state, right=of qri] (qre) {};
+            
+            \node[state, right=of qre, accepting] (qa) {};
+
+            \path (qs) edge[] node{$\epsilon$} (qri);
+            \path (qre) edge[] node{$\epsilon$} (qa);
+
+            \path (qre) edge[bend right=100] node[above]{$\epsilon$} (qri);
+
+            \path (qs) edge[bend right=40] node{$\epsilon$} (qa);
+
+            
+
+            \node[draw, rectangle, rounded corners, fit=(qri)(qre), inner sep=10pt] {$R$};
+        \end{automata}
+        \caption{}
+    \end{subfigure}
+    \caption{Construction of $\epsilon$-NFA for composite regular expressions.}
+    \label{fig:re-fa-ind}
+\end{figure}
+\end{proof}
+\FloatBarrier
+\subsection{Algebraic Laws for Regular Expressions}
+
+\begin{itemize}
+    \item Union commutativity: $L + M = M + L$
+    \item Union associativity: $(L + M) + N = L + (M + N)$
+    \item Concatenation associative: $(LM)N = L(MN)$
+    \item Union identity: $L + \emptyset = \emptyset + L = L$
+    \item Concatenation identity: $\epsilon L = L \epsilon = L$
+    \item Concatenation annihilator: $\emptyset L = L \emptyset = \emptyset$
+    \item Left distributive concatenation over union: $L(M + N) = LM + LN$
+    \item Right distributive concatenation over union: $(M + N)L = ML + NL$
+    \item Union idempotent: $L + L = L$
+    \item Closed closures: $(L^*)^* = L^*$
+    \item Closed empty language: $\emptyset^* = \epsilon$
+    \item Closed empty string: $\epsilon^* = \epsilon$
+    \item Plus closure: $L^+ = LL^*$
+    \item Star as Plus: $L^* = L^+ + \epsilon$
+    \item Optional: $L? = \epsilon + L$
+\end{itemize}
+
+\subsection{Test for RE Algebraic Laws}
+% Could elaborate a little, dont feel like it now
+To test whether two regular expressions are the same a technique is: Suppose a regular expression $R$ is composed of $L_1,\dots,L_n$, replace each occurrence of $L_i$ by a concrete symbol $w_i$. Do this for both languages and investigate whether they produce the same language. 
+
